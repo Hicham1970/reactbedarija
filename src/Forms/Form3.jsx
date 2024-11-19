@@ -1,48 +1,48 @@
-import { useState } from "react";
-export default function Form2() {
+import { useState, useEffect, useRef } from "react";
+export default function Form3() {
+    // Si on a besoin d afficher les données d'un tableau a chaque fois qu'elles changent=> useState, Sinon on utilise useRef hook
+    // useRef hook est utilisé pour stocker les valeurs d'un tableau dans un objet et pour les modifier en temps réel dans le DOM (React)
+    // useRef hook ne provoque pas de re-rendu du composant contrairement à useState hook
+    // Dans cette exemple on va faire un tracking des 5 elements d'un formulaire
+    const [submittedValues, setSubmittedValues] = useState(null); // État pour stocker les valeurs soumises
+    const inputNameRef = useRef();
+    const inputDateRef = useRef();
+    const inputCityRef = useRef();
+    const inputCountryRef = useRef();
+    const inputAcceptRef = useRef();
+    // eslint-disable-next-line no-unused-vars
+
+    // Si on veut définir des valeurs par défaut:
+    useEffect(() => {
+        inputNameRef.current.value = "John Doe";
+        inputDateRef.current.value = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD
+        inputCountryRef.current.selectedIndex = 2; // Index de la valeur sélectionnée
+        inputCityRef.current.focus()
+    })
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const valeurs = {
+            name: inputNameRef.current.value,
+            date: inputDateRef.current.value,
+            city: inputCityRef.current.value,
+            country: inputCountryRef.current.value,
+            accept: inputAcceptRef.current.checked,
+        };
+        console.log(valeurs);
+
+        setSubmittedValues(valeurs); // Mettre à jour l'état avec les valeurs soumises
+    }
 
 
-    // pour récupérer le nom et l'age :
-    // const [inputName, setInputName] = useState("");
-    // const [inputAge, setInputAge] = useState("");
-    // const [acceptChange, setAcceptChange] = useState(false);
-    const [formValues, setFormValues] = useState({ name: "", age: "", city: "", country: "", accept: false });
-    // const [city, setCity] = useState("");
-    // const handleNameInputChange = () => {
-    //     const name = document.getElementById("name").value;
-    //     setInputName(name);
-    //     console.log(name, inputName);
-    // };
-    const handleInputChange = (e) => {
-        const currentTarget = e.currentTarget;
-        const id = e.currentTarget.id;
-        let value = e.currentTarget.value;
-        if (currentTarget.type === "checkbox") {
-            value = e.currentTarget.checked;
-        }
-        setFormValues({ ...formValues, [id]: value });
-        console.log(formValues);
-    };
-    // const handleAgeInputChange = () => {
-    //     const age = document.getElementById("age").value;
-    //     setInputAge(age);
-    //     console.log(age, inputAge);
-    // };
-    // const handleAcceptChange = () => {
-    //     const accept = document.getElementById("accept").checked;
-    //     setAcceptChange(accept);
-    //     console.log(accept, acceptChange);
-    // };
     return (
+        <div className="container my-6 mx-15">
+            <form onSubmit={handleSubmit}>
+                <h3>Last Update</h3><hr />
 
-        <div className="container my-5">
-            <img
-                src="/public/images/PrinceArabia.png"
-                alt="Description de l'image"
-                className="fixed top-0 left-0 w-full h-full object-cover" // Exemple de classes
-            />
-            <form>
-                {JSON.stringify(formValues)}
+                {new Date().toLocaleString()}
+                {/* Afficher les valeurs après la soumission.  Avant cela, valeurs est undefined. */}
+                <pre>{submittedValues ? JSON.stringify(submittedValues, null, 2) : "Aucune valeur soumise"}</pre> {/*  Affiche valeurs formaté */}
                 <div className="form-group p-2">
                     <label>Name</label>
                     <input
@@ -50,17 +50,17 @@ export default function Form2() {
                         id="name"
                         placeholder="Name"
                         className="form-control"
-                        onChange={handleInputChange}
+                        ref={inputNameRef}
                     />
                 </div>
                 <div className="form-group">
-                    <label>Age</label>
+                    <label>Date</label>
                     <input
                         type="text"
-                        id="age"
-                        placeholder="Age"
+                        id="date"
+                        placeholder="Date"
                         className="form-control"
-                        onChange={handleInputChange}
+                        ref={inputDateRef}
                     />
                 </div>
                 <div className="form-group">
@@ -70,18 +70,13 @@ export default function Form2() {
                         id="city"
                         placeholder="City"
                         className="form-control"
-                        onChange={handleInputChange}
+                        ref={inputCityRef}
                     />
                 </div>
                 <div className="form-group">
                     <label>Country</label>
-                    <label htmlFor="country" className="form-label">
-                    </label>
-                    <select
-                        id="country"
-                        className="form-control"
-                        onChange={handleInputChange}
-                    >
+                    <label htmlFor="country" className="form-label"></label>
+                    <select id="country" className="form-control" ref={inputCountryRef}>
                         <option value="fr">France</option>
                         <option value="Mr">Morocco</option>
                         <option value="al">Algeria</option>
@@ -93,14 +88,14 @@ export default function Form2() {
                         type="checkbox"
                         id="accept"
                         className="form-check-input"
-                        onChange={handleInputChange}
+                        ref={inputAcceptRef}
                     />
                     <label htmlFor="accept" className="form-check-label">
                         Accept our rules
                     </label>
                 </div>
                 <div className="form-group my-4">
-                    <button className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary" >Submit</button>
                 </div>
             </form>
         </div>

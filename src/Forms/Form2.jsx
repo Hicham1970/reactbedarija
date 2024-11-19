@@ -36,11 +36,7 @@ export default function Form2() {
     return (
         
         <div className="container my-5">
-            <img
-                src="/public/images/PrinceArabia.png"
-                alt="Description de l'image"
-                className="fixed top-0 left-0 w-full h-full object-cover" // Exemple de classes
-            />
+            
             <form>
                 {JSON.stringify(formValues)}
                 <div className="form-group p-2">

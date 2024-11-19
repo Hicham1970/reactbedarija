@@ -1,11 +1,11 @@
 import './App.css';
-import Form2 from './Forms/Form2';
+import FormValidationBeginner from './Forms/FormValidationBeginner';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <div className="App">
-      <Form2 />
+      <FormValidationBeginner />
     </div>
   );
 }
