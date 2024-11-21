@@ -62,16 +62,23 @@ function FormValidationBeginner() {
   }
   // fonction de soumission du formulaire:
   const handleSubmit = (e) => {
-    e.preventDefault()
     setErrors([])
-    validateForm()
+    //Si le formulaire n'est pas valide, on ne soumet pas le formulaire:
+    if (!validateForm()) {
+      e.preventDefault()
+    }
+    //Si le formulaire est valide, on soumet le formulaire:
+    else {
+      // on l'envoie a la base données par exemple et on donne un feedback:
+      alert("Form submitted successfully")
+    }
 
   }
   return (
     <div className="container-fluid w-75 mx-auto my-5">
       {errors.length > 0 ?
         <div className="alert alert-danger" role="alert">
-          <strong>Attention Error</strong>
+          <strong>Please fix the following errors:</strong>
           <ul>
             {errors.map((error, index) => <li key={index}>{error}</li>)}
           </ul>
